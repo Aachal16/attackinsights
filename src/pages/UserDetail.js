@@ -313,6 +313,7 @@ const UserDetail = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [confirmationDialog, setConfirmationDialog] = useState({ isOpen: false, warning: '', action: null });
+  const [confirmationLoading, setConfirmationLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [showKebabMenu, setShowKebabMenu] = useState(false);
@@ -427,10 +428,51 @@ const UserDetail = () => {
     });
   };
 
-  const handleConfirmAction = () => {
+  const handleConfirmAction = async () => {
+    // Show loader on the Yes button
+    setConfirmationLoading(true);
+   
+    // Wait for 2 seconds
+    await new Promise(resolve => setTimeout(resolve, 2000));
     // Perform the action here
     console.log('Action confirmed:', confirmationDialog.action);
-    
+
+     // Update the user's alert type back to 'okay'
+    if (user) {
+      const updatedUser = {
+        ...user,
+        status: 'okay',
+        alertType: 'okay'
+      };
+      setUser(updatedUser);
+     
+      // Update the cached users in sessionStorage
+      try {
+        const cached = sessionStorage.getItem('cachedUsers');
+        if (cached) {
+          const users = JSON.parse(cached);
+          const updatedUsers = users.map(u =>
+            u.id === user.id ? updatedUser : u
+          );
+          sessionStorage.setItem('cachedUsers', JSON.stringify(updatedUsers));
+        }
+       
+        // Also update nonCriticalUserStatus cache
+        const nonCriticalCached = sessionStorage.getItem('nonCriticalUserStatus');
+        if (nonCriticalCached) {
+          const users = JSON.parse(nonCriticalCached);
+          const updatedUsers = users.map(u =>
+            u.id === user.id ? updatedUser : u
+          );
+          sessionStorage.setItem('nonCriticalUserStatus', JSON.stringify(updatedUsers));
+        }
+      } catch (e) {
+        console.error('Error updating cached users:', e);
+      }
+    }
+
+    //Hide loader
+    setConfirmationLoading(false);
     // Close confirmation dialog
     setConfirmationDialog({ isOpen: false, warning: '', action: null });
     
@@ -769,6 +811,7 @@ const UserDetail = () => {
         warning={confirmationDialog.warning}
         onConfirm={handleConfirmAction}
         onCancel={handleCancelAction}
+        isLoading={confirmationLoading}
       />
 
       <Toast

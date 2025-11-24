@@ -301,16 +301,23 @@ const UserList = () => {
 
   // After 10 seconds, set Mvspps to 'critical'
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setUsers(prevUsers => {
-        const updated = prevUsers.map(u =>
-          u.userName === 'Mvspps' ? { ...u, status: 'critical', alertType: 'critical' } : u
-        );
-        sessionStorage.setItem('nonCriticalUserStatus', JSON.stringify(updated));
-        return updated;
-      });
-    }, 10000);
-    return () => clearTimeout(timer);
+    // Check if the timer has already been triggered in this session
+    const timerTriggered = sessionStorage.getItem('mvsppsTimerTriggered');
+   
+    if (!timerTriggered) {
+      const timer = setTimeout(() => {
+        setUsers(prevUsers => {
+          const updated = prevUsers.map(u =>
+            u.userName === 'Mvspps' ? { ...u, status: 'critical', alertType: 'critical' } : u
+          );
+          sessionStorage.setItem('nonCriticalUserStatus', JSON.stringify(updated));
+          // Mark that the timer has been triggered
+          sessionStorage.setItem('mvsppsTimerTriggered', 'true');
+          return updated;
+        });
+      }, 10000);
+      return () => clearTimeout(timer);
+    }
   }, []);
   const [loading, setLoading] = useState(false);
   const [statusesFetched, setStatusesFetched] = useState(false);
