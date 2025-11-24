@@ -312,6 +312,7 @@ const UserDetail = () => {
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [dataLoaded, setDataLoaded] = useState(false);
   const [confirmationDialog, setConfirmationDialog] = useState({ isOpen: false, warning: '', action: null });
   const [confirmationLoading, setConfirmationLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -349,7 +350,7 @@ const UserDetail = () => {
   // Fetch user data when user is loaded
   useEffect(() => {
     const loadUserData = async () => {
-      if (!user) return;
+      if (!user || dataLoaded) return;
 
       // Always fetch from API with progress bar
       setShowProgressBar(true);
@@ -373,6 +374,7 @@ const UserDetail = () => {
         setUserData(details);
         
         setLoaderStep(3);
+        setDataLoaded(true); //Mark data as loaded
         
         // Hide progress bar and show content
         setShowProgressBar(false);
@@ -389,7 +391,7 @@ const UserDetail = () => {
     };
 
     loadUserData();
-  }, [user]);
+  }, [user, dataLoaded]);
 
   // Close kebab menu when clicking outside
   useEffect(() => {
