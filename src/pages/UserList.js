@@ -238,56 +238,6 @@ const fetchUserStatus = async (userId) => {
   return { userId, status: randomStatus };
 };
 
-// Mock API function to fetch user details with summary and next steps
-const fetchUserDetails = async (userId) => {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 300));
-  
-  // Mock response matching the specified format
-  return {
-    summary: `# User Analysis Summary
-
-## Current Status
-This user account requires **immediate attention** due to recent activity patterns.
-
-### Key Findings
-- Account has been **active** in the last 24 hours
-- Multiple login attempts detected
-- Access level: **Standard User**
-
-### Recommendations
-1. Review recent activity logs
-2. Verify account permissions
-3. Consider security audit if suspicious activity continues`,
-    next_steps: [
-      {
-        action: "Search knowledge base",
-        impact: "High",
-        warning: "This action will invoke this ID and may affect system performance",
-        info: "Invoke racf ID to search knowledge base for related information and documentation."
-      },
-      {
-        action: "Delete ID",
-        impact: "High",
-        warning: "This action will delete this ID permanently. This cannot be undone.",
-        info: "Delete racf ID from the system. All associated data will be removed."
-      },
-      {
-        action: "Revoke ID",
-        impact: "Medium",
-        warning: "This action will revoke this ID.",
-        info: "Revoke racf ID from the system. All associated data will be removed."
-      },
-       {
-        action: "Notify User",
-        impact: "Low",
-        warning: "This action will notigy user.",
-        info: " Notify the user about the malicious activity."
-      }
-    ]
-  };
-};
-
 const UserList = () => {
   // Load cached users from sessionStorage if available
   const loadCachedUsers = () => {
@@ -348,23 +298,25 @@ const UserList = () => {
     sessionStorage.setItem('nonCriticalUserStatus', JSON.stringify(initialUsers));
     return initialUsers;
   });
-    // After 10 seconds, set Mvspps to 'critical'
-    useEffect(() => {
-      const timer = setTimeout(() => {
-        setUsers(prevUsers => {
-          const updated = prevUsers.map(u =>
-            u.userName === 'Mvspps' ? { ...u, status: 'critical', alertType: 'critical' } : u
-          );
-          sessionStorage.setItem('nonCriticalUserStatus', JSON.stringify(updated));
-          return updated;
-        });
-      }, 10000);
-      return () => clearTimeout(timer);
-    }, []);
+
+  // After 10 seconds, set Mvspps to 'critical'
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setUsers(prevUsers => {
+        const updated = prevUsers.map(u =>
+          u.userName === 'Mvspps' ? { ...u, status: 'critical', alertType: 'critical' } : u
+        );
+        sessionStorage.setItem('nonCriticalUserStatus', JSON.stringify(updated));
+        return updated;
+      });
+    }, 10000);
+    return () => clearTimeout(timer);
+  }, []);
   const [loading, setLoading] = useState(false);
   const [statusesFetched, setStatusesFetched] = useState(false);
   const [lastFetchedTime, setLastFetchedTime] = useState(null);
   const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('User data fetched and updated successfully');
   const [filterType, setFilterType] = useState('priority'); // 'priority' or 'username'
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(9);
@@ -382,14 +334,9 @@ const UserList = () => {
       const statusPromises = users.map(user => fetchUserStatus(user.id));
       const statusResults = await Promise.all(statusPromises);
       
-      // Fetch user details (summary and next_steps) for all users
-      const detailsPromises = users.map(user => fetchUserDetails(user.id));
-      const detailsResults = await Promise.all(detailsPromises);
-      
-      // Update users with their statuses and details
-        const updatedUsers = users.map((user, index) => {
+      // Update users with their statuses
+      const updatedUsers = users.map((user, index) => {
         const statusResult = statusResults.find(result => result.userId === user.id);
-        const detailsResult = detailsResults[index];
         // Get original data from user or originalData
         const originalData = user.originalData || user;
         return {
@@ -405,14 +352,11 @@ const UserList = () => {
           // Use alertType if available, otherwise use fetched status, otherwise use 'okay'
           status: user.alertType || (statusResult ? statusResult.status : (user.status || 'okay')),
           alertType: user.alertType,
-          userData: detailsResult, // Store the API response data
           originalData: originalData // Preserve original data
         };
       });
       
       setUsers(updatedUsers);
-      //setStatusesFetched(true);
-      //setLastFetchedTime(new Date());
       setShowToast(true);
       
       // Cache users data in sessionStorage
@@ -472,11 +416,9 @@ const UserList = () => {
   useEffect(() => {
     // Check if any user already has status data
     const hasStatusData = users.some(user => user.status);
-    // Check if any user already has userData (summary/next_steps)
-    const hasUserData = users.some(user => user.userData);
     
     // Only fetch if we don't have status data yet (first time load)
-    if (!hasStatusData || !hasUserData) {
+    if (!hasStatusData) {
       handleFetchStatuses();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -508,9 +450,12 @@ const UserList = () => {
       <Header />
       <div className="user-list-container">
         <Toast 
-          message="User data fetched and updated successfully"
+          message={toastMessage}
           show={showToast}
-          onClose={() => setShowToast(false)}
+          onClose={() => {
+            setShowToast(false);
+            setToastMessage('User data fetched and updated successfully');
+          }}
         />
 
         <div className="parent-card">
@@ -604,8 +549,7 @@ const UserList = () => {
                   onClick={() => {
                     navigate(`/user/${user.id}`, { 
                       state: { 
-                        user,
-                        userData: user.userData 
+                        user
                       } 
                     });
                   }}

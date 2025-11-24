@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import ConfirmationDialog from '../components/ConfirmationDialog';
 import Toast from '../components/Toast';
 import Header from '../components/Header';
+import { fetchUserDetails } from '../services/api';
 import './UserDetail.css';
 
 // Mock user data (same as UserList)
@@ -328,34 +329,66 @@ const UserDetail = () => {
     if (location.state?.user) {
       setUser(location.state.user);
     } else {
-      // Fallback to finding user from mock data
-      const foundUser = mockUsers.find(u => u.id === parseInt(id));
-      setUser(foundUser);
+      // Fallback to finding user from cached data
+      try {
+        const cached = sessionStorage.getItem('cachedUsers');
+        if (cached) {
+          const users = JSON.parse(cached);
+          const foundUser = users.find(u => u.id === parseInt(id));
+          if (foundUser) {
+            setUser(foundUser);
+          }
+        }
+      } catch (e) {
+        console.error('Error loading user from cache:', e);
+      }
     }
   }, [id, location.state]);
 
-  // Fetch user data when component mounts or user changes
+  // Fetch user data when user is loaded
   useEffect(() => {
-    if (user && location.state?.userData) {
-      setUserData(location.state.userData);
-    }
-  }, [user, location.state]);
+    const loadUserData = async () => {
+      if (!user) return;
 
-  // Show progress bar on mount, hide after 5 seconds and show content
-  useEffect(() => {
-    // Loader step sequence: 0: SMF, 1: user, 2: response, 3: done
-    let timers = [];
-    timers.push(setTimeout(() => setLoaderStep(1), 1000));
-    timers.push(setTimeout(() => setLoaderStep(2), 2000));
-    timers.push(setTimeout(() => setLoaderStep(3), 4000));
-    timers.push(setTimeout(() => {
-      setShowProgressBar(false);
-      setShowContent(true);
-    }, 4000));
-    return () => {
-      timers.forEach(clearTimeout);
+      // Always fetch from API with progress bar
+      setShowProgressBar(true);
+      setShowContent(false);
+      setLoading(true);
+      
+      try {
+        // Step 1: Fetching SMF data (1 second)
+        setLoaderStep(0);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Step 2: Fetching user data (1 second)
+        setLoaderStep(1);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Step 3: Generating response (until API responds)
+        setLoaderStep(2);
+        
+        // Fetch user details from API
+        const details = await fetchUserDetails(user.id, user.userName);
+        setUserData(details);
+        
+        setLoaderStep(3);
+        
+        // Hide progress bar and show content
+        setShowProgressBar(false);
+        setShowContent(true);
+      } catch (error) {
+        console.error('Error fetching user details:', error);
+        setShowProgressBar(false);
+        setShowContent(true);
+        setToastMessage('Failed to fetch user details from API');
+        setShowToast(true);
+      } finally {
+        setLoading(false);
+      }
     };
-  }, []);
+
+    loadUserData();
+  }, [user]);
 
   // Close kebab menu when clicking outside
   useEffect(() => {
