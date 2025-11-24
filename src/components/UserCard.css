@@ -1,0 +1,70 @@
+.user-card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-bottom: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  min-height: auto;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.user-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.user-card-header h3 {
+  margin: 0;
+  color: #333;
+  font-size: 1.25rem;
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-critical {
+  background-color: #dc3545;
+  color: white;
+}
+
+.status-warning {
+  background-color: #f5a323;
+  color: #333;
+}
+
+.status-okay {
+  background-color: #11845b;
+  
+  color: white;
+}
+
+.user-card-body {
+  color: #666;
+}
+
+.user-card-body p {
+  margin: 8px 0;
+  font-size: 0.9rem;
+}
+
+.user-card-body strong {
+  color: #333;
+}
+
