@@ -733,6 +733,15 @@ const UserDetail = () => {
                               <td className="next-step-action-cell">
                                 <button
                                   className="action-button"
+                                  style={{
+                                    maxWidth: '220px',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    display: 'inline-block',
+                                    verticalAlign: 'middle'
+                                  }}
+                                  title={step.action}
                                   onClick={() => handleActionClick(step)}
                                 >
                                   {step.action}
