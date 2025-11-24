@@ -8,103 +8,7 @@ import './UserList.css';
 // Mock user data from the provided structure
 const mockUsersCollection = {
   "usersCollection": [
-    {
-      "IndexID": 0,
-      "CatalogIndex": 19,
-      "userName": "Acmtpn6",
-      "fromDevice": {
-        "deviceName": "",
-        "deviceAddress": "172.24.48.140"
-      },
-      "lastMessageDateTime": "2025/11/19 21:17:12",
-      "todayCount": 147,
-      "historyCount": 147
-    },
-    {
-      "IndexID": 0,
-      "CatalogIndex": 1,
-      "userName": "Admin",
-      "fromDevice": {
-        "deviceName": "clm-aus-w39v00.clm-mgmt.clm.bmc.com",
-        "deviceAddress": "10.17.165.138"
-      },
-      "lastMessageDateTime": "2025/11/01 04:59:05",
-      "todayCount": 0,
-      "historyCount": 84264
-    },
-    {
-      "IndexID": 0,
-      "CatalogIndex": 3,
-      "userName": "Administrator",
-      "fromDevice": {
-        "deviceName": "clm-aus-w39v00.clm-mgmt.clm.bmc.com",
-        "deviceAddress": "10.17.165.138"
-      },
-      "lastMessageDateTime": "2025/11/01 04:59:05",
-      "todayCount": 0,
-      "historyCount": 109018
-    },
-    {
-      "IndexID": 0,
-      "CatalogIndex": 4,
-      "userName": "Bladelogicrscd",
-      "fromDevice": {
-        "deviceName": "clm-aus-w39v00.clm-mgmt.clm.bmc.com",
-        "deviceAddress": "10.17.165.138"
-      },
-      "lastMessageDateTime": "2025/11/18 03:32:57",
-      "todayCount": 0,
-      "historyCount": 191
-    },
-    {
-      "IndexID": 0,
-      "CatalogIndex": 11,
-      "userName": "Bmcadmin",
-      "fromDevice": {
-        "deviceName": "clm-aus-w39v00.clm-mgmt.clm.bmc.com",
-        "deviceAddress": "10.17.165.138"
-      },
-      "lastMessageDateTime": "2025/11/19 19:48:05",
-      "todayCount": 24,
-      "historyCount": 21488
-    },
-    {
-      "IndexID": 0,
-      "CatalogIndex": 18,
-      "userName": "Bmcdb2",
-      "fromDevice": {
-        "deviceName": "",
-        "deviceAddress": "172.24.48.140"
-      },
-      "lastMessageDateTime": "2025/11/19 21:17:12",
-      "todayCount": 1163,
-      "historyCount": 1163
-    },
-    {
-      "IndexID": 0,
-      "CatalogIndex": 5,
-      "userName": "Defaultaccount",
-      "fromDevice": {
-        "deviceName": "clm-aus-w39v00.clm-mgmt.clm.bmc.com",
-        "deviceAddress": "10.17.165.138"
-      },
-      "lastMessageDateTime": "2025/11/01 04:59:05",
-      "todayCount": 0,
-      "historyCount": 71
-    },
-    {
-      "IndexID": 0,
-      "CatalogIndex": 6,
-      "userName": "Dijoshi",
-      "fromDevice": {
-        "deviceName": "clm-aus-w39v00.clm-mgmt.clm.bmc.com",
-        "deviceAddress": "10.17.165.138"
-      },
-      "lastMessageDateTime": "2025/11/01 04:59:05",
-      "todayCount": 0,
-      "historyCount": 101
-    },
-    {
+     {
       "IndexID": 0,
       "CatalogIndex": 7,
       "userName": "Guest",
@@ -112,153 +16,117 @@ const mockUsersCollection = {
         "deviceName": "clm-aus-w39v00.clm-mgmt.clm.bmc.com",
         "deviceAddress": "10.17.165.138"
       },
-      "lastMessageDateTime": "2025/11/19 03:38:43",
+      "lastMessageDateTime": "2025/11/23 03:15:02",
       "todayCount": 1,
-      "historyCount": 879
+      "historyCount": 883
     },
     {
       "IndexID": 0,
       "CatalogIndex": 16,
       "userName": "Ioa",
       "fromDevice": {
-        "deviceName": "",
+        "deviceName": "mvsdb2a.bmc.com",
         "deviceAddress": "172.24.48.140"
       },
-      "lastMessageDateTime": "2025/11/19 21:17:12",
-      "todayCount": 834,
-      "historyCount": 834
+      "lastMessageDateTime": "2025/11/23 21:08:16",
+      "todayCount": 52972,
+      "historyCount": 64257
+    },
+    {
+      "IndexID": 0,
+      "CatalogIndex": 26,
+      "userName": "Ioa5220",
+      "fromDevice": {
+        "deviceName": "mvsdb2a.bmc.com",
+        "deviceAddress": "172.24.48.140"
+      },
+      "lastMessageDateTime": "2025/11/20 22:01:14",
+      "todayCount": 0,
+      "historyCount": 16
+    },
+    {
+      "IndexID": 0,
+      "CatalogIndex": 50,
+      "userName": "Ioa5990",
+      "fromDevice": {
+        "deviceName": "mvsdb2a.bmc.com",
+        "deviceAddress": "172.24.48.140"
+      },
+      "lastMessageDateTime": "2025/11/23 18:54:20",
+      "todayCount": 1,
+      "historyCount": 1
+    },
+    {
+      "IndexID": 0,
+      "CatalogIndex": 59,
+      "userName": "Ioadasd",
+      "fromDevice": {
+        "deviceName": "mvsdb2a.bmc.com",
+        "deviceAddress": "172.24.48.140"
+      },
+      "lastMessageDateTime": "2025/11/23 21:01:17",
+      "todayCount": 1,
+      "historyCount": 1
+    },
+    {
+      "IndexID": 0,
+      "CatalogIndex": 46,
+      "userName": "Ioamaint",
+      "fromDevice": {
+        "deviceName": "mvsdb2a.bmc.com",
+        "deviceAddress": "172.24.48.140"
+      },
+      "lastMessageDateTime": "2025/11/23 20:46:01",
+      "todayCount": 78,
+      "historyCount": 78
+    },
+    {
+      "IndexID": 0,
+      "CatalogIndex": 45,
+      "userName": "Ispt#ct",
+      "fromDevice": {
+        "deviceName": "mvsdb2a.bmc.com",
+        "deviceAddress": "172.24.48.140"
+      },
+      "lastMessageDateTime": "2025/11/23 18:00:22",
+      "todayCount": 4,
+      "historyCount": 4
     },
     {
       "IndexID": 0,
       "CatalogIndex": 23,
       "userName": "Ispwcm",
       "fromDevice": {
-        "deviceName": "",
+        "deviceName": "mvsdb2a.bmc.com",
         "deviceAddress": "172.24.48.140"
       },
-      "lastMessageDateTime": "2025/11/19 21:16:52",
-      "todayCount": 4,
-      "historyCount": 4
+      "lastMessageDateTime": "2025/11/23 20:47:57",
+      "todayCount": 201,
+      "historyCount": 430
     },
     {
       "IndexID": 0,
-      "CatalogIndex": 22,
-      "userName": "Izusvr",
+      "CatalogIndex": 25,
+      "userName": "Mvspps",
       "fromDevice": {
-        "deviceName": "",
+        "deviceName": "mvsdb2a.bmc.com",
         "deviceAddress": "172.24.48.140"
       },
-      "lastMessageDateTime": "2025/11/19 21:16:26",
-      "todayCount": 6,
-      "historyCount": 6
+      "lastMessageDateTime": "2025/11/23 19:29:35",
+      "todayCount": 326,
+      "historyCount": 362
     },
     {
       "IndexID": 0,
-      "CatalogIndex": 17,
-      "userName": "Maint",
+      "CatalogIndex": 24,
+      "userName": "Mvspys",
       "fromDevice": {
-        "deviceName": "",
+        "deviceName": "mvsdb2a.bmc.com",
         "deviceAddress": "172.24.48.140"
       },
-      "lastMessageDateTime": "2025/11/19 21:17:12",
-      "todayCount": 1539,
-      "historyCount": 1539
-    },
-    {
-      "IndexID": 0,
-      "CatalogIndex": 21,
-      "userName": "Mvsrzg",
-      "fromDevice": {
-        "deviceName": "",
-        "deviceAddress": "172.24.48.140"
-      },
-      "lastMessageDateTime": "2025/11/19 21:15:36",
-      "todayCount": 1,
-      "historyCount": 1
-    },
-    {
-      "IndexID": 0,
-      "CatalogIndex": 20,
-      "userName": "Pinsxv0",
-      "fromDevice": {
-        "deviceName": "",
-        "deviceAddress": "172.24.48.140"
-      },
-      "lastMessageDateTime": "2025/11/19 21:16:52",
-      "todayCount": 5,
-      "historyCount": 5
-    },
-    {
-      "IndexID": 0,
-      "CatalogIndex": 8,
-      "userName": "Rdsmon",
-      "fromDevice": {
-        "deviceName": "clm-aus-w39v00.clm-mgmt.clm.bmc.com",
-        "deviceAddress": "10.17.165.138"
-      },
-      "lastMessageDateTime": "2025/11/01 04:59:05",
-      "todayCount": 0,
-      "historyCount": 278
-    },
-    {
-      "IndexID": 0,
-      "CatalogIndex": 9,
-      "userName": "Rdsroot",
-      "fromDevice": {
-        "deviceName": "clm-aus-w39v00.clm-mgmt.clm.bmc.com",
-        "deviceAddress": "10.17.165.138"
-      },
-      "lastMessageDateTime": "2025/11/01 04:59:05",
-      "todayCount": 0,
-      "historyCount": 496
-    },
-    {
-      "IndexID": 0,
-      "CatalogIndex": 15,
-      "userName": "Stcuser",
-      "fromDevice": {
-        "deviceName": "",
-        "deviceAddress": "172.24.48.140"
-      },
-      "lastMessageDateTime": "2025/11/19 21:16:01",
-      "todayCount": 21,
-      "historyCount": 21
-    },
-    {
-      "IndexID": 0,
-      "CatalogIndex": 13,
-      "userName": "Tdadmin",
-      "fromDevice": {
-        "deviceName": "clm-aus-w39v00.clm-mgmt.clm.bmc.com",
-        "deviceAddress": "10.17.165.138"
-      },
-      "lastMessageDateTime": "2025/11/06 20:52:17",
-      "todayCount": 0,
-      "historyCount": 2518
-    },
-    {
-      "IndexID": 0,
-      "CatalogIndex": 14,
-      "userName": "Undefined",
-      "fromDevice": {
-        "deviceName": "clm-aus-w39v00.clm-mgmt.clm.bmc.com",
-        "deviceAddress": "10.17.165.138"
-      },
-      "lastMessageDateTime": "2025/11/18 13:48:21",
-      "todayCount": 0,
-      "historyCount": 2
-    },
-    {
-      "IndexID": 0,
-      "CatalogIndex": 10,
-      "userName": "Wdagutilityaccount",
-      "fromDevice": {
-        "deviceName": "clm-aus-w39v00.clm-mgmt.clm.bmc.com",
-        "deviceAddress": "10.17.165.138"
-      },
-      "lastMessageDateTime": "2025/11/01 04:59:05",
-      "todayCount": 0,
-      "historyCount": 71
+      "lastMessageDateTime": "2025/11/23 16:40:44",
+      "todayCount": 47,
+      "historyCount": 58
     }
   ],
   "paging": {
@@ -274,6 +142,9 @@ const mockUsersCollection = {
 const alertTypes = ['critical', 'warning', 'okay', null];
 const getRandomAlertType = () => alertTypes[Math.floor(Math.random() * alertTypes.length)];
 
+// Only allow 'okay' or 'warning' for random assignment
+const nonCriticalAlertTypes = ['okay', 'warning'];
+const getNonCriticalAlertType = () => nonCriticalAlertTypes[Math.floor(Math.random() * nonCriticalAlertTypes.length)];
 // Add some random entries
 const additionalUsers = [
   {
@@ -350,7 +221,7 @@ const mockUsers = allUsersCollection.map((user, index) => ({
   lastMessageDateTime: user.lastMessageDateTime,
   todayCount: user.todayCount,
   historyCount: user.historyCount,
-  alertType: getRandomAlertType(),
+  alertType: user.userName === 'Mvspps' ? 'okay' : getNonCriticalAlertType(),
   // Keep original data for reference
   originalData: user
 }));
@@ -464,7 +335,32 @@ const UserList = () => {
     }));
   };
 
-  const [users, setUsers] = useState(loadCachedUsers);
+  const [users, setUsers] = useState(() => {
+    // Try to load from sessionStorage
+    const cached = sessionStorage.getItem('nonCriticalUserStatus');
+    if (cached) {
+      return JSON.parse(cached);
+    }
+    // On first load, set Mvspps to 'okay', others to random 'okay'/'warning'
+    const initialUsers = loadCachedUsers().map(u =>
+      u.userName === 'Mvspps' ? { ...u, status: 'okay', alertType: 'okay' } : u
+    );
+    sessionStorage.setItem('nonCriticalUserStatus', JSON.stringify(initialUsers));
+    return initialUsers;
+  });
+    // After 10 seconds, set Mvspps to 'critical'
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setUsers(prevUsers => {
+          const updated = prevUsers.map(u =>
+            u.userName === 'Mvspps' ? { ...u, status: 'critical', alertType: 'critical' } : u
+          );
+          sessionStorage.setItem('nonCriticalUserStatus', JSON.stringify(updated));
+          return updated;
+        });
+      }, 10000);
+      return () => clearTimeout(timer);
+    }, []);
   const [loading, setLoading] = useState(false);
   const [statusesFetched, setStatusesFetched] = useState(false);
   const [lastFetchedTime, setLastFetchedTime] = useState(null);
@@ -796,7 +692,7 @@ const UserList = () => {
       <footer className="app-footer">
         <div className="footer-content">
           <div className="footer-left">
-            <img src="/bmc-logo.svg" alt="BMC Software" className="footer-logo" />
+            <img src="/bmc-logo-reversed.svg" alt="BMC Software" className="footer-logo" />
             <p>BMC Software</p>
           </div>
           <p className="footer-right">© 2025 All rights reserved</p>

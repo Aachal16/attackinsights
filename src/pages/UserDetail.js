@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import ConfirmationDialog from '../components/ConfirmationDialog';
 import Toast from '../components/Toast';
+import Header from '../components/Header';
 import './UserDetail.css';
 
 // Mock user data (same as UserList)
@@ -319,6 +320,7 @@ const UserDetail = () => {
   const [feedbackRating, setFeedbackRating] = useState(0);
   const [showProgressBar, setShowProgressBar] = useState(true);
   const [showContent, setShowContent] = useState(false);
+  const [loaderStep, setLoaderStep] = useState(0);
   const [isLeftCardCollapsed, setIsLeftCardCollapsed] = useState(false);
 
   useEffect(() => {
@@ -341,17 +343,17 @@ const UserDetail = () => {
 
   // Show progress bar on mount, hide after 5 seconds and show content
   useEffect(() => {
-    const progressTimer = setTimeout(() => {
+    // Loader step sequence: 0: SMF, 1: user, 2: response, 3: done
+    let timers = [];
+    timers.push(setTimeout(() => setLoaderStep(1), 1000));
+    timers.push(setTimeout(() => setLoaderStep(2), 2000));
+    timers.push(setTimeout(() => setLoaderStep(3), 4000));
+    timers.push(setTimeout(() => {
       setShowProgressBar(false);
-    }, 5000);
-    
-    const contentTimer = setTimeout(() => {
       setShowContent(true);
-    }, 3000);
-    
+    }, 4000));
     return () => {
-      clearTimeout(progressTimer);
-      clearTimeout(contentTimer);
+      timers.forEach(clearTimeout);
     };
   }, []);
 
@@ -461,23 +463,24 @@ const UserDetail = () => {
   };
 
   if (!showContent) {
+    let loaderMsg = '';
+    if (loaderStep === 0) loaderMsg = 'Fetching SMF data...';
+    else if (loaderStep === 1) loaderMsg = 'Fetching user data...';
+    else loaderMsg = 'Generating response...';
     return (
       <div className="user-detail-container">
         {showProgressBar && (
           <div className="progress-loader-fullscreen">
-            <div className="progress-loader-content">
-              <div className="ai-animated-loader">
-                <div className="ai-pulse-ring"></div>
-                <div className="ai-pulse-ring"></div>
-                <div className="ai-pulse-ring"></div>
+            <div className="progress-loader-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div className="ai-animated-loader" style={{ width: '120px', height: '120px', marginBottom: '8px' }}>
                 <div className="ai-center-icon">
-                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                  <svg className="ai-insights-icon" width="80" height="80" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M36.681 36.693l-1.26-4.76c-1.408-5.393-5.677-9.57-11.11-10.93l-4.755-1.167c-.63-.146-.63-1.069 0-1.263l2.572-.68C28.87 16.144 34.11 10.801 35.76 4.048l.63-2.575c.146-.631 1.068-.631 1.262 0l1.261 4.761c1.407 5.392 5.676 9.57 11.11 10.93l4.754 1.166c.63.146.63 1.069 0 1.263l-4.754 1.263c-5.385 1.41-9.558 5.684-10.916 11.076l-1.164 4.76c-.146.633-1.067.633-1.261.001M20.049 54.912l-.804-3.059a9.817 9.817 0 0 0-7.13-7.019l-3.064-.752c-.402-.1-.402-.701 0-.802l1.657-.45a12.383 12.383 0 0 0 8.788-8.875l.402-1.654c.1-.401.703-.401.803 0l.804 3.058a9.817 9.817 0 0 0 7.13 7.019l3.064.752c.401.1.401.702 0 .802l-3.063.802a9.816 9.816 0 0 0-7.03 7.12l-.754 3.058a.408.408 0 0 1-.803 0M40.89 62.81l-.455-1.668c-.505-1.921-2.022-3.387-3.943-3.893l-1.72-.404a.231.231 0 0 1 0-.455l.91-.253a6.877 6.877 0 0 0 4.854-4.954l.202-.91a.231.231 0 0 1 .455 0l.455 1.668c.506 1.921 2.022 3.387 3.943 3.893l1.72.404a.231.231 0 0 1 0 .455l-1.669.455c-1.921.506-3.387 2.023-3.893 3.944l-.404 1.718c-.05.253-.404.253-.455 0" fill="#ff5a4e"/>
                   </svg>
                 </div>
               </div>
               <div className="progress-text-section">
-                <h3>Generating response...</h3>
+                <h3>{loaderMsg}</h3>
                 <div className="mini-progress-bar">
                   <div className="mini-progress-fill"></div>
                 </div>
@@ -491,6 +494,7 @@ const UserDetail = () => {
 
   return (
     <div className="user-detail-wrapper">
+      <Header />
     <div className="user-detail-container">
       <div className="user-detail-content">
         <div className="parent-detail-card">
@@ -576,28 +580,65 @@ const UserDetail = () => {
                     
                     <div className="user-detail-fields">
                       <div className="detail-field">
-                        <label>Device Name</label>
+                        <label>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                            <line x1="8" y1="21" x2="16" y2="21"></line>
+                            <line x1="12" y1="17" x2="12" y2="21"></line>
+                          </svg>
+                          Device Name
+                        </label>
                         <div className="field-value">{user.deviceName || 'N/A'}</div>
                       </div>
                       <div className="detail-field">
-                        <label>Device Address</label>
+                        <label>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                          </svg>
+                          Device Address
+                        </label>
                         <div className="field-value">{user.deviceAddress || 'N/A'}</div>
                       </div>
                       <div className="detail-field">
-                        <label>Today's Count</label>
+                        <label>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                          </svg>
+                          Today's Count
+                        </label>
                         <div className="field-value">{user.todayCount || 0}</div>
                       </div>
                       <div className="detail-field">
-                        <label>History Count</label>
+                        <label>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                          </svg>
+                          History Count
+                        </label>
                         <div className="field-value">{user.historyCount || 0}</div>
                       </div>
                       <div className="detail-field">
-                        <label>Last Message Timestamp</label>
+                        <label>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                          </svg>
+                          Last Message Timestamp
+                        </label>
                         <div className="field-value">{user.lastMessageDateTime || 'N/A'}</div>
                       </div>
                       {user.status && (
                         <div className="detail-field">
-                          <label>Status</label>
+                          <label>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            Status
+                          </label>
                           <div className="field-value-text">
                             <span className={`status-badge status-${user.status}`}>
                               {user.status === 'okay' ? 'All Good' : user.status.charAt(0).toUpperCase() + user.status.slice(1)}
@@ -770,7 +811,7 @@ const UserDetail = () => {
     <footer className="app-footer">
       <div className="footer-content">
         <div className="footer-left">
-          <img src="/bmc-logo.svg" alt="BMC Software" className="footer-logo" />
+          <img src="/bmc-logo-reversed.svg" alt="BMC Software" className="footer-logo" />
           <p>BMC Software</p>
         </div>
         <p className="footer-right">© 2025 All rights reserved</p>
@@ -782,4 +823,3 @@ const UserDetail = () => {
 
 export { ACTIONS, IMPACT_VALUES };
 export default UserDetail;
-

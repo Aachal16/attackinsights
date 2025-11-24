@@ -1,5 +1,5 @@
 .app-header {
-  background-color: white;
+  background-color: #15232E;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 15px 0;
   position: sticky;
@@ -17,7 +17,7 @@
 }
 
 .header-title {
-  color: #333;
+  color: #fff;
   margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
