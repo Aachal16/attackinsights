@@ -4,10 +4,16 @@
   flex-direction: column;
   width: 100%;
   box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
 }
 
 .user-detail-wrapper * {
   box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
 }
 
 .user-detail-container {
@@ -706,6 +712,9 @@
   border-radius: 5px;
   width: 100%;
   box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
 }
 
 .next-steps-section h2 {
@@ -948,6 +957,9 @@
   resize: vertical;
   min-height: 120px;
   box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
 }
 
 .feedback-textarea:focus {
