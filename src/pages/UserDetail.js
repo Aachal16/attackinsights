@@ -650,7 +650,7 @@ const UserDetail = () => {
                         </svg>
                       </div>
                       <div className="user-name-section">
-                        <h2 className="user-name">{user.userName || 'Unknown User'}</h2>
+                        <h2 className="user-name">{(user.userName || 'Unknown User').toUpperCase()}</h2>
                         {user.deviceAddress && <p className="user-email">{user.deviceAddress}</p>}
                       </div>
                     </div>

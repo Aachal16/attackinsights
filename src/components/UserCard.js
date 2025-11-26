@@ -58,7 +58,7 @@ const UserCard = ({ user, onClick }) => {
   return (
     <div className="user-card" style={cardStyle} onClick={handleClick}>
       <div className="user-card-header">
-        <h3>{user.userName || 'Unknown User'}</h3>
+        <h3>{(user.userName || 'Unknown User').toUpperCase()}</h3>
         {user.status && (
           <span className={`status-badge status-${status}`}>
             {getStatusLabel(user.status)}
