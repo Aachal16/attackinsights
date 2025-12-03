@@ -16,6 +16,20 @@
   justify-content: space-between;
 }
 
+.header-title-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.header-subtitle {
+  color: #fff;
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 400;
+  opacity: 0.9;
+}
+
 .header-title {
   color: #fff;
   margin: 0;
@@ -24,6 +38,10 @@
 }
 
 @media (max-width: 768px) {
+  .header-subtitle {
+    font-size: 0.75rem;
+  }
+  
   .header-title {
     font-size: 1.25rem;
   }
@@ -61,17 +79,20 @@
 
 .notification-badge {
   position: absolute;
-  top: 4px;
-  right: 4px;
+  top: 2px;
+  right: 2px;
   background-color: #dc3545;
   color: #fff;
   font-size: 10px;
   font-weight: 600;
-  padding: 2px 5px;
+  padding: 1px 4px;
   border-radius: 10px;
-  min-width: 18px;
+  min-width: 16px;
+  height: 16px;
   text-align: center;
-  line-height: 1.2;
+  line-height: 14px;
+  border: 2px solid #15232E;
+  box-sizing: border-box;
 }
 
 .notification-dropdown {
@@ -198,7 +219,6 @@
 
 .notification-content {
   display: flex;
-  gap: 12px;
   flex: 1;
 }
 

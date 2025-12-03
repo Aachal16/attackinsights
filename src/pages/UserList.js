@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserCard from '../components/UserCard';
 import Toast from '../components/Toast';
 import Header from '../components/Header';
+import { useNotifications } from '../context/NotificationContext';
 import './UserList.css';
 
 // Mock user data from the provided structure
@@ -299,6 +300,10 @@ const UserList = () => {
     return initialUsers;
   });
 
+  // Initialize hooks
+  const { addNotification } = useNotifications();
+  const notificationSentRef = useRef(new Set());
+
   // After 10 seconds, set Mvspps to 'critical'
   useEffect(() => {
     // Check if the timer has already been triggered in this session
@@ -307,9 +312,24 @@ const UserList = () => {
     if (!timerTriggered) {
       const timer = setTimeout(() => {
         setUsers(prevUsers => {
-          const updated = prevUsers.map(u =>
-            u.userName === 'Mvspps' ? { ...u, status: 'critical', alertType: 'critical' } : u
-          );
+          const updated = prevUsers.map(u => {
+            if (u.userName === 'Mvspps') {
+              const oldAlertType = u.alertType || u.status || 'okay';
+              const newAlertType = 'critical';
+              // Add notification if alertType changed and we haven't already notified for this change
+              const notificationKey = `Mvspps-${oldAlertType}-${newAlertType}`;
+              if (oldAlertType !== newAlertType && !notificationSentRef.current.has(notificationKey)) {
+                addNotification({
+                  title: `Alert Type Updated: ${u.userName.toUpperCase()}`,
+                  message: `User ${u.userName.toUpperCase()} alert type changed from ${oldAlertType} to ${newAlertType}`,
+                  alertType: newAlertType
+                });
+                notificationSentRef.current.add(notificationKey);
+              }
+              return { ...u, status: 'critical', alertType: 'critical' };
+            }
+            return u;
+          });
           sessionStorage.setItem('nonCriticalUserStatus', JSON.stringify(updated));
           // Mark that the timer has been triggered
           sessionStorage.setItem('mvsppsTimerTriggered', 'true');
@@ -346,6 +366,23 @@ const UserList = () => {
         const statusResult = statusResults.find(result => result.userId === user.id);
         // Get original data from user or originalData
         const originalData = user.originalData || user;
+        const oldAlertType = user.alertType || user.status || 'okay';
+        const newAlertType = user.alertType || (statusResult ? statusResult.status : (user.status || 'okay'));
+        
+        // Add notification if alertType changed and we haven't already notified for this change
+        if (oldAlertType !== newAlertType) {
+          const userName = (user.userName || originalData.userName || 'Unknown User').toUpperCase();
+          const notificationKey = `${userName}-${oldAlertType}-${newAlertType}`;
+          if (!notificationSentRef.current.has(notificationKey)) {
+            addNotification({
+              title: `Alert Type Updated: ${userName}`,
+              message: `User ${userName} alert type changed from ${oldAlertType} to ${newAlertType}`,
+              alertType: newAlertType
+            });
+            notificationSentRef.current.add(notificationKey);
+          }
+        }
+        
         return {
           ...user,
           // Preserve all original user data - prioritize existing data, then originalData
@@ -357,8 +394,8 @@ const UserList = () => {
           todayCount: user.todayCount !== undefined ? user.todayCount : (originalData.todayCount || 0),
           historyCount: user.historyCount !== undefined ? user.historyCount : (originalData.historyCount || 0),
           // Use alertType if available, otherwise use fetched status, otherwise use 'okay'
-          status: user.alertType || (statusResult ? statusResult.status : (user.status || 'okay')),
-          alertType: user.alertType,
+          status: newAlertType,
+          alertType: newAlertType,
           originalData: originalData // Preserve original data
         };
       });

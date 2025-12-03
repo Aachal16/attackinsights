@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { sendTeamsMessage } from '../services/teamsService';
 
 const NotificationContext = createContext();
 
@@ -34,7 +35,7 @@ export const NotificationProvider = ({ children }) => {
     setUnreadCount(notifications.filter(n => !n.read).length);
   }, [notifications]);
 
-  const addNotification = (notification) => {
+  const addNotification = async (notification) => {
     const newNotification = {
       id: Date.now(),
       timestamp: new Date().toISOString(),
@@ -42,6 +43,11 @@ export const NotificationProvider = ({ children }) => {
       ...notification
     };
     setNotifications(prev => [newNotification, ...prev]);
+    
+    // Send notification to Microsoft Teams (non-blocking)
+    sendTeamsMessage(newNotification).catch(error => {
+      console.error('Failed to send Teams notification:', error);
+    });
   };
 
   const markAsRead = (id) => {

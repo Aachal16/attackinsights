@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import ConfirmationDialog from '../components/ConfirmationDialog';
 import Toast from '../components/Toast';
 import Header from '../components/Header';
+import { useNotifications } from '../context/NotificationContext';
 import { fetchUserDetails } from '../services/api';
 import './UserDetail.css';
 
@@ -325,6 +326,8 @@ const UserDetail = () => {
   const [showContent, setShowContent] = useState(false);
   const [loaderStep, setLoaderStep] = useState(0);
   const [isLeftCardCollapsed, setIsLeftCardCollapsed] = useState(false);
+  const { addNotification } = useNotifications();
+  const notificationSentRef = useRef(new Set());
 
   useEffect(() => {
     // First try to get user from navigation state
@@ -441,6 +444,23 @@ const UserDetail = () => {
 
      // Update the user's alert type back to 'okay'
     if (user) {
+      const oldAlertType = user.alertType || user.status || 'okay';
+      const newAlertType = 'okay';
+      
+      // Add notification if alertType changed and we haven't already notified for this change
+      if (oldAlertType !== newAlertType) {
+        const userName = (user.userName || 'Unknown User').toUpperCase();
+        const notificationKey = `${userName}-${oldAlertType}-${newAlertType}`;
+        if (!notificationSentRef.current.has(notificationKey)) {
+          addNotification({
+            title: `Alert Type Updated: ${userName}`,
+            message: `User ${userName} alert type changed from ${oldAlertType} to ${newAlertType}`,
+            alertType: newAlertType
+          });
+          notificationSentRef.current.add(notificationKey);
+        }
+      }
+      
       const updatedUser = {
         ...user,
         status: 'okay',
